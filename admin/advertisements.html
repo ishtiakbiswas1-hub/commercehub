@@ -14,9 +14,23 @@
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
     </div>
 
-    <div class="flex min-h-screen">
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-slate-800 border-b border-slate-700 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white text-xs">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <span class="font-bold text-sm text-white">Affiliate Admin</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="dashboard.html" class="p-2 text-slate-300 hover:text-white bg-slate-700/50 rounded-lg text-xs"><i class="fa-solid fa-chart-pie"></i></a>
+            <a href="products.html" class="p-2 text-slate-300 hover:text-white bg-slate-700/50 rounded-lg text-xs"><i class="fa-solid fa-box"></i></a>
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row min-h-screen flex-1">
         <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col shrink-0">
+        <aside class="hidden md:flex w-64 bg-slate-800 border-r border-slate-700 flex-col shrink-0">
             <div class="p-5 border-b border-slate-700 flex items-center gap-3">
                 <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/30">
                     <i class="fa-solid fa-cart-shopping"></i>
@@ -51,47 +65,62 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 p-6 md:p-8 overflow-x-hidden">
-            <header class="mb-8 pb-4 border-b border-slate-800">
-                <h1 class="text-2xl font-bold text-white">Adsterra অ্যাডভারটাইজমেন্ট স্লট</h1>
-                <p class="text-xs text-slate-400 mt-1">আপনার ৪টি নির্ধারিত বিজ্ঞাপন স্লট স্বাধীনভাবে কনফিগার ও আপডেট করুন</p>
+        <main class="flex-1 p-4 md:p-8 overflow-x-hidden pb-20 md:pb-8">
+            <header class="mb-6 pb-4 border-b border-slate-800">
+                <h1 class="text-xl md:text-2xl font-bold text-white">Adsterra অ্যাডভারটাইজমেন্ট স্লট</h1>
+                <p class="text-xs text-slate-400 mt-0.5">আপনার ৪টি নির্ধারিত বিজ্ঞাপন স্লট স্বাধীনভাবে কনফিগার করুন</p>
             </header>
 
             <!-- 4 Ad Slots Grid -->
-            <div id="adSlotsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Dynamic Ad Slots will load here -->
+            <div id="adSlotsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Dynamic Ad Slots -->
             </div>
         </main>
     </div>
 
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 px-4 py-2 flex items-center justify-around z-40 text-xs">
+        <a href="dashboard.html" class="flex flex-col items-center text-slate-400 py-1">
+            <i class="fa-solid fa-chart-pie text-base mb-0.5"></i>
+            <span>ড্যাশবোর্ড</span>
+        </a>
+        <a href="products.html" class="flex flex-col items-center text-slate-400 py-1">
+            <i class="fa-solid fa-box text-base mb-0.5"></i>
+            <span>প্রোডাক্ট</span>
+        </a>
+        <a href="advertisements.html" class="flex flex-col items-center text-indigo-400 font-semibold py-1">
+            <i class="fa-solid fa-rectangle-ad text-base mb-0.5"></i>
+            <span>বিজ্ঞাপন</span>
+        </a>
+    </div>
+
     <!-- Edit Ad Modal -->
-    <div id="adModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg p-6 shadow-2xl">
-            <div class="flex justify-between items-center pb-4 mb-4 border-b border-slate-700">
-                <h3 id="modalTitle" class="text-lg font-bold text-white">অ্যাড স্লট এডিট করুন</h3>
-                <button id="closeModalBtn" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <div id="adModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg p-5 md:p-6 shadow-2xl">
+            <div class="flex justify-between items-center pb-3 mb-4 border-b border-slate-700">
+                <h3 id="modalTitle" class="text-base md:text-lg font-bold text-white">অ্যাড স্লট এডিট করুন</h3>
+                <button id="closeModalBtn" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <form id="adForm" class="space-y-4">
+            <form id="adForm" class="space-y-3.5">
                 <input type="hidden" id="adSlotId">
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">বিজ্ঞাপনের নাম (Ad Name)</label>
-                    <input type="text" id="adName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                    <label class="block text-[11px] font-semibold text-slate-400 uppercase mb-1">বিজ্ঞাপনের নাম (Ad Name)</label>
+                    <input type="text" id="adName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Adsterra অ্যাড কোড / স্ক্রিপ্ট (Script)</label>
+                    <label class="block text-[11px] font-semibold text-slate-400 uppercase mb-1">Adsterra অ্যাড কোড / স্ক্রিপ্ট (Script)</label>
                     <textarea id="adScript" rows="5" placeholder="<script type='text/javascript'>...</script>" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3 font-mono text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></textarea>
-                    <p class="text-[11px] text-amber-400 mt-1">⚠️ অ্যাডমিন প্যানেলে এই কোডটি এক্সিকিউট হবে না, শুধু সুরক্ষিতভাবে সেভ থাকবে।</p>
                 </div>
 
-                <div class="flex items-center gap-2 pt-2">
+                <div class="flex items-center gap-2 pt-1">
                     <input type="checkbox" id="adStatus" class="w-4 h-4 rounded accent-indigo-600">
                     <label for="adStatus" class="text-xs text-slate-300 cursor-pointer font-semibold">এই অ্যাড স্লটটি চালু (Active) রাখুন</label>
                 </div>
 
-                <div class="flex justify-end gap-3 pt-4 border-t border-slate-700">
+                <div class="flex justify-end gap-3 pt-3 border-t border-slate-700">
                     <button type="button" id="cancelModalBtn" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold rounded-xl">বাতিল</button>
                     <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl">সংরক্ষণ করুন</button>
                 </div>
@@ -117,14 +146,13 @@
             }
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
             if (confirm('লগআউট করতে চান?')) {
                 await logoutAdmin();
                 window.location.href = 'login.html';
             }
         });
 
-        // 4 Fixed Ad Slots Initializer & Loader
         async function loadAdSlots() {
             container.innerHTML = '';
             const slotIds = ['slot_1', 'slot_2', 'slot_3', 'slot_4'];
@@ -142,26 +170,25 @@
                 };
 
                 if (!docSnap.exists()) {
-                    // Create default doc if not exists in Firestore
                     await setDoc(docRef, adData);
                 } else {
                     adData = docSnap.data();
                 }
 
                 const card = document.createElement('div');
-                card.className = 'bg-slate-800 border border-slate-700 rounded-2xl p-5 flex flex-col justify-between shadow-xl';
+                card.className = 'bg-slate-800 border border-slate-700 rounded-2xl p-4 md:p-5 flex flex-col justify-between shadow-xl';
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between mb-3">
-                            <span class="px-2.5 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[11px] font-bold rounded-lg uppercase tracking-wider">অ্যাড স্লট ${i + 1}</span>
-                            <span class="px-2.5 py-1 text-[10px] font-semibold rounded-full ${adData.status ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-700 text-slate-400'}">
+                            <span class="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-bold rounded-lg uppercase tracking-wider">অ্যাড স্লট ${i + 1}</span>
+                            <span class="px-2.5 py-0.5 text-[10px] font-semibold rounded-full ${adData.status ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-700 text-slate-400'}">
                                 ${adData.status ? 'Active' : 'Disabled'}
                             </span>
                         </div>
-                        <h3 class="text-base font-bold text-white mb-2">${adData.name}</h3>
+                        <h3 class="text-sm md:text-base font-bold text-white mb-2">${adData.name}</h3>
                         <div class="bg-slate-900 border border-slate-700/60 rounded-xl p-3 mb-4">
-                            <p class="text-[11px] text-slate-400 uppercase font-semibold mb-1">কনফিগারড কোড স্নিপেট:</p>
-                            <code class="text-xs text-indigo-300 font-mono line-clamp-2">${adData.script ? escapeHtml(adData.script) : '// কোনো বিজ্ঞাপন কোড দেওয়া হয়নি'}</code>
+                            <p class="text-[10px] text-slate-400 uppercase font-semibold mb-1">কনফিগারড কোড স্নিপেট:</p>
+                            <code class="text-[11px] text-indigo-300 font-mono line-clamp-2">${adData.script ? escapeHtml(adData.script) : '// কোনো বিজ্ঞাপন কোড দেওয়া হয়নি'}</code>
                         </div>
                     </div>
                     <button onclick="openEditAdModal('${sId}', '${escapeAttr(adData.name)}', '${escapeAttr(adData.script)}', ${adData.status})" class="w-full py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition-all">
@@ -173,7 +200,6 @@
             }
         }
 
-        // Modal Controls
         window.openEditAdModal = (id, name, script, status) => {
             document.getElementById('adSlotId').value = id;
             document.getElementById('adName').value = name;
@@ -187,7 +213,6 @@
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
 
-        // Save Ad Configuration
         adForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('adSlotId').value;
@@ -205,7 +230,6 @@
             }
         });
 
-        // Security Helper Functions
         function escapeHtml(text) {
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
