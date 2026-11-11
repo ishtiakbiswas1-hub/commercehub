@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Affiliate E-Commerce Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Top Header Advertisement Slot 1 -->
+    <div id="adSlot1Container" class="bg-slate-900 border-b border-slate-800 py-2 text-center overflow-hidden hidden">
+        <!-- Adsterra Code dynamically injected here -->
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <div id="siteLogoBox" class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/30 overflow-hidden">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <span id="siteNameDisplay" class="font-bold text-lg md:text-xl text-white tracking-wide">Affiliate Shop</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md mx-8">
+                <div class="relative w-full">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                    <input type="text" id="searchInput" placeholder="প্রোডাক্ট সার্চ করুন..." 
+                        class="w-full bg-slate-900 border border-slate-800 rounded-full py-2 pl-11 pr-4 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#productsSection" class="text-xs md:text-sm font-semibold text-slate-300 hover:text-indigo-400 transition-all">সকল প্রোডাক্ট</a>
+                <a href="admin/login.html" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs flex items-center gap-1.5 border border-slate-700 transition-all">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span class="hidden sm:inline">অ্যাডমিন</span>
+                </a>
+            </div>
+        </div>
+        <!-- Mobile Search Bar -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                <input type="text" id="mobileSearchInput" placeholder="প্রোডাক্ট সার্চ করুন..." 
+                    class="w-full bg-slate-900 border border-slate-800 rounded-full py-2 pl-11 pr-4 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section / Homepage Banner Ad Slot 2 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-6">
+        <div id="adSlot2Container" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center hidden min-h-[100px] flex items-center justify-center">
+            <!-- Ad Slot 2 -->
+        </div>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-6">
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="categoryTabs">
+            <button onclick="filterCategory('All')" class="cat-btn px-4 py-2 bg-indigo-600 text-white font-semibold text-xs rounded-xl whitespace-nowrap shadow-lg shadow-indigo-600/20 transition-all">সকল ক্যাটাগরি</button>
+            <button onclick="filterCategory('Electronics')" class="cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 font-semibold text-xs rounded-xl border border-slate-800 whitespace-nowrap transition-all">Electronics</button>
+            <button onclick="filterCategory('Fashion')" class="cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 font-semibold text-xs rounded-xl border border-slate-800 whitespace-nowrap transition-all">Fashion</button>
+            <button onclick="filterCategory('Gadgets')" class="cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 font-semibold text-xs rounded-xl border border-slate-800 whitespace-nowrap transition-all">Gadgets</button>
+            <button onclick="filterCategory('Home & Lifestyle')" class="cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 font-semibold text-xs rounded-xl border border-slate-800 whitespace-nowrap transition-all">Home & Lifestyle</button>
+        </div>
+    </section>
+
+    <!-- Main Products Section -->
+    <main id="productsSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-8 flex-1">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-fire text-indigo-500"></i> ট্রেন্ডিং এফিলিয়েট প্রোডাক্টস
+            </h2>
+            <span id="productCountBadge" class="text-xs text-slate-400 bg-slate-900 px-3 py-1 rounded-full border border-slate-800">লোড হচ্ছে...</span>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="customerProductsGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <!-- Dynamic Products Loaded Here -->
+        </div>
+    </main>
+
+    <!-- Advertisement Slot 3 (Between Product / Before Footer) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-6">
+        <div id="adSlot3Container" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center hidden min-h-[90px] flex items-center justify-center">
+            <!-- Ad Slot 3 -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 mt-12 py-8">
+        <div id="adSlot4Container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center hidden">
+            <!-- Ad Slot 4 -->
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <p id="footerTextDisplay">© 2026 Affiliate Shop. All rights reserved.</p>
+            <div class="flex items-center gap-4">
+                <a id="facebookLink" href="#" target="_blank" class="hover:text-white transition-all hidden"><i class="fa-brands fa-facebook text-base"></i></a>
+                <a id="telegramLink" href="#" target="_blank" class="hover:text-white transition-all hidden"><i class="fa-brands fa-telegram text-base"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Customer Website Logic Script -->
+    <script type="module">
+        import { db } from './assets/js/firebase.js';
+        import { collection, getDocs, doc, getDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        let allProductsCache = [];
+        let currentCategory = 'All';
+        let searchQuery = '';
+
+        // Load Settings & Branding
+        async function loadWebsiteSettings() {
+            try {
+                const docRef = doc(db, "settings", "general");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.siteName) {
+                        document.getElementById('siteNameDisplay').textContent = data.siteName;
+                        document.getElementById('pageTitle').textContent = data.siteName + ' - Best Affiliate Deals';
+                    }
+                    if (data.footerText) {
+                        document.getElementById('footerTextDisplay').textContent = data.footerText;
+                    }
+                    if (data.logoUrl) {
+                        document.getElementById('siteLogoBox').innerHTML = `<img src="${data.logoUrl}" class="w-full h-full object-cover">`;
+                    }
+                    if (data.facebookUrl) {
+                        const fb = document.getElementById('facebookLink');
+                        fb.href = data.facebookUrl;
+                        fb.classList.remove('hidden');
+                    }
+                    if (data.telegramUrl) {
+                        const tg = document.getElementById('telegramLink');
+                        tg.href = data.telegramUrl;
+                        tg.classList.remove('hidden');
+                    }
+                }
+            } catch (err) {
+                console.error("Error loading settings:", err);
+            }
+        }
+
+        // Load Advertisements (Slots 1 to 4)
+        async function loadAdvertisements() {
+            const slots = ['slot_1', 'slot_2', 'slot_3', 'slot_4'];
+            for (let i = 0; i < slots.length; i++) {
+                try {
+                    const docRef = doc(db, "advertisements", slots[i]);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const ad = docSnap.data();
+                        const container = document.getElementById(`adSlot${i + 1}Container`);
+                        if (container && ad.status && ad.script) {
+                            container.innerHTML = `<div class="w-full overflow-x-auto flex justify-center">${ad.script}</div>`;
+                            container.classList.remove('hidden');
+                        }
+                    }
+                } catch (err) {
+                    console.error(`Error loading ad slot ${i+1}:`, err);
+                }
+            }
+        }
+
+        // Realtime Products Listener (Only Active Products)
+        function loadCustomerProducts() {
+            const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                allProductsCache = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    // Show only Active (status === true) products on public website
+                    if (data.status === true) {
+                        allProductsCache.push({ id: docSnap.id, ...data });
+                    }
+                });
+                renderProducts();
+            });
+        }
+
+        // Render Products to Grid
+        function renderProducts() {
+            const grid = document.getElementById('customerProductsGrid');
+            const badge = document.getElementById('productCountBadge');
+            grid.innerHTML = '';
+
+            let filtered = allProductsCache.filter(p => {
+                const matchCategory = currentCategory === 'All' || p.category === currentCategory;
+                const matchSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                    (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()));
+                return matchCategory && matchSearch;
+            });
+
+            badge.textContent = filtered.length + ' টি প্রোডাক্ট';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-slate-500">
+                        <i class="fa-solid fa-box-open text-4xl mb-3"></i>
+                        <p class="text-sm">কোনো প্রোডাক্ট পাওয়া যায়নি।</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-indigo-500/50 transition-all shadow-xl group';
+                card.innerHTML = `
+                    <div>
+                        <div class="relative aspect-square overflow-hidden bg-slate-950">
+                            <img src="${p.imageUrl || 'https://via.placeholder.com/300'}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300">
+                            ${p.featured ? '<span class="absolute top-2 left-2 px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded-md uppercase tracking-wider">Featured</span>' : ''}
+                        </div>
+                        <div class="p-3.5">
+                            <span class="text-[10px] font-semibold text-indigo-400 uppercase tracking-wider">${p.category}</span>
+                            <h3 class="font-bold text-slate-100 text-xs md:text-sm mt-1 line-clamp-2">${p.title}</h3>
+                            <p class="text-[11px] text-slate-400 mt-1 line-clamp-1">${p.description || ''}</p>
+                        </div>
+                    </div>
+                    <div class="p-3.5 pt-0 flex items-center justify-between gap-2 border-t border-slate-800/60 mt-2">
+                        <span class="font-bold text-emerald-400 text-sm md:text-base">৳ ${p.price || 0}</span>
+                        <a href="${p.buyNowUrl}" target="_blank" rel="nofollow noopener" 
+                            class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-indigo-600/20 flex items-center gap-1.5 transition-all">
+                            <span>Buy Now</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Category Filter Event
+        window.filterCategory = (cat) => {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.textContent.includes(cat) || (cat === 'All' && btn.textContent.includes('সকল'))) {
+                    btn.className = 'cat-btn px-4 py-2 bg-indigo-600 text-white font-semibold text-xs rounded-xl whitespace-nowrap shadow-lg shadow-indigo-600/20 transition-all';
+                } else {
+                    btn.className = 'cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 font-semibold text-xs rounded-xl border border-slate-800 whitespace-nowrap transition-all';
+                }
+            });
+            renderProducts();
+        };
+
+        // Search Listeners
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderProducts();
+        });
+        document.getElementById('mobileSearchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderProducts();
+        });
+
+        // Initialize App
+        loadWebsiteSettings();
+        loadAdvertisements();
+        loadCustomerProducts();
+    </script>
+</body>
+              </html>
