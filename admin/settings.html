@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ওয়েবসাইট সেটিংস - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Screen Loader -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-slate-800 border-b border-slate-700 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white text-xs">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <span class="font-bold text-sm text-white">Affiliate Admin</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="dashboard.html" class="p-2 text-slate-300 hover:text-white bg-slate-700/50 rounded-lg text-xs"><i class="fa-solid fa-chart-pie"></i></a>
+            <a href="products.html" class="p-2 text-slate-300 hover:text-white bg-slate-700/50 rounded-lg text-xs"><i class="fa-solid fa-box"></i></a>
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row min-h-screen flex-1">
+        <!-- Sidebar Navigation -->
+        <aside class="hidden md:flex w-64 bg-slate-800 border-r border-slate-700 flex-col shrink-0">
+            <div class="p-5 border-b border-slate-700 flex items-center gap-3">
+                <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-white text-base">Affiliate Admin</h2>
+                    <span class="text-[11px] text-indigo-400 font-medium">E-COMMERCE PANEL</span>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5 flex-1">
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-700/50 hover:text-slate-200 rounded-xl font-medium text-sm transition-all">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>ড্যাশবোর্ড</span>
+                </a>
+                <a href="products.html" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-700/50 hover:text-slate-200 rounded-xl font-medium text-sm transition-all">
+                    <i class="fa-solid fa-box"></i>
+                    <span>প্রোডাক্ট ম্যানেজমেন্ট</span>
+                </a>
+                <a href="advertisements.html" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-700/50 hover:text-slate-200 rounded-xl font-medium text-sm transition-all">
+                    <i class="fa-solid fa-rectangle-ad"></i>
+                    <span>বিজ্ঞাপন ম্যানেজমেন্ট</span>
+                </a>
+                <a href="settings.html" class="flex items-center gap-3 px-4 py-3 bg-indigo-600/10 text-indigo-400 rounded-xl font-medium text-sm transition-all border border-indigo-500/20">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>ওয়েবসাইট সেটিংস</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-700">
+                <button id="logoutBtn" class="w-full py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold rounded-xl border border-red-500/20 flex items-center justify-center gap-2 transition-all">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>লগআউট করুন</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 md:p-8 overflow-x-hidden pb-20 md:pb-8">
+            <header class="mb-6 pb-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-white">ওয়েবসাইট সেটিংস</h1>
+                    <p class="text-xs text-slate-400 mt-0.5">আপনার ই-কমার্স সাইটের ব্র্যান্ডিং, তথ্য ও সোশ্যাল লিংক কনফিগার করুন</p>
+                </div>
+                <div id="saveSuccessAlert" class="hidden px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> সফলভাবে সংরক্ষিত হয়েছে!
+                </div>
+            </header>
+
+            <!-- Settings Form Card -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 md:p-8 shadow-xl max-w-3xl">
+                <form id="settingsForm" class="space-y-5">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">ওয়েবসাইটের নাম (Website Name)</label>
+                            <input type="text" id="siteName" placeholder="যেমন: My Affiliate Shop" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">যোগাযোগ ইমেইল (Contact Email)</label>
+                            <input type="email" id="contactEmail" placeholder="support@example.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">লোগো ইমেজ URL (Logo URL)</label>
+                            <input type="url" id="logoUrl" placeholder="https://example.com/logo.png" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">যোগাযোগ ফোন নম্বর (Phone Number)</label>
+                            <input type="text" id="contactPhone" placeholder="+8801XXXXXXXXX" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">ওয়েবসাইট বিবরণ (Website Description)</label>
+                        <textarea id="siteDescription" rows="3" placeholder="আপনার এফিলিয়েট শপ সম্পর্কে সংক্ষিপ্ত বিবরণ..." class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">ফেসবুক পেজ লিংক (Facebook)</label>
+                            <input type="url" id="facebookUrl" placeholder="https://facebook.com/yourshop" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">টেলিগ্রাম চ্যানেল লিংক (Telegram)</label>
+                            <input type="url" id="telegramUrl" placeholder="https://t.me/yourshop" class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">ফুটার কপিরাইট টেক্সট (Footer Text)</label>
+                        <input type="text" id="footerText" placeholder="© 2026 My Affiliate Shop. All rights reserved." class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-3.5 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700 flex justify-end">
+                        <button type="submit" id="saveSettingsBtn" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs md:text-sm rounded-xl shadow-lg shadow-indigo-600/20 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>সেটিংস সেভ করুন</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 px-4 py-2 flex items-center justify-around z-40 text-xs">
+        <a href="dashboard.html" class="flex flex-col items-center text-slate-400 py-1">
+            <i class="fa-solid fa-chart-pie text-base mb-0.5"></i>
+            <span>ড্যাশবোর্ড</span>
+        </a>
+        <a href="products.html" class="flex flex-col items-center text-slate-400 py-1">
+            <i class="fa-solid fa-box text-base mb-0.5"></i>
+            <span>প্রোডাক্ট</span>
+        </a>
+        <a href="advertisements.html" class="flex flex-col items-center text-slate-400 py-1">
+            <i class="fa-solid fa-rectangle-ad text-base mb-0.5"></i>
+            <span>বিজ্ঞাপন</span>
+        </a>
+        <a href="settings.html" class="flex flex-col items-center text-indigo-400 font-semibold py-1">
+            <i class="fa-solid fa-sliders text-base mb-0.5"></i>
+            <span>সেটিংস</span>
+        </a>
+    </div>
+
+    <!-- Script Block -->
+    <script type="module">
+        import { checkAuthState, logoutAdmin, db } from '../assets/js/firebase.js';
+        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const settingsForm = document.getElementById('settingsForm');
+        const saveSuccessAlert = document.getElementById('saveSuccessAlert');
+
+        checkAuthState((user) => {
+            if (!user) window.location.href = 'login.html';
+            else {
+                loadingOverlay.classList.add('hidden');
+                loadSettings();
+            }
+        });
+
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            if (confirm('লগআউট করতে চান?')) {
+                await logoutAdmin();
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Load Settings from Firestore
+        async function loadSettings() {
+            try {
+                const docRef = doc(db, "settings", "general");
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('siteName').value = data.siteName || '';
+                    document.getElementById('contactEmail').value = data.contactEmail || '';
+                    document.getElementById('logoUrl').value = data.logoUrl || '';
+                    document.getElementById('contactPhone').value = data.contactPhone || '';
+                    document.getElementById('siteDescription').value = data.siteDescription || '';
+                    document.getElementById('facebookUrl').value = data.facebookUrl || '';
+                    document.getElementById('telegramUrl').value = data.telegramUrl || '';
+                    document.getElementById('footerText').value = data.footerText || '';
+                }
+            } catch (err) {
+                console.error('Error loading settings:', err);
+            }
+        }
+
+        // Save Settings to Firestore
+        settingsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveSettingsBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> সেইভ হচ্ছে...';
+
+            const settingsData = {
+                siteName: document.getElementById('siteName').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                logoUrl: document.getElementById('logoUrl').value,
+                contactPhone: document.getElementById('contactPhone').value,
+                siteDescription: document.getElementById('siteDescription').value,
+                facebookUrl: document.getElementById('facebookUrl').value,
+                telegramUrl: document.getElementById('telegramUrl').value,
+                footerText: document.getElementById('footerText').value,
+                updatedAt: new Date()
+            };
+
+            try {
+                const docRef = doc(db, "settings", "general");
+                await setDoc(docRef, settingsData, { merge: true });
+                
+                saveSuccessAlert.classList.remove('hidden');
+                setTimeout(() => {
+                    saveSuccessAlert.classList.add('hidden');
+                }, 3000);
+            } catch (err) {
+                alert('সেটিংস সংরক্ষণ করতে সমস্যা হয়েছে: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i><span>সেটিংস সেভ করুন</span>';
+            }
+        });
+    </script>
+</body>
+  </html>
