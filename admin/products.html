@@ -198,7 +198,7 @@
 
     <!-- Script Block -->
     <script type="module">
-    import { 
+        import { 
             checkAuthState, 
             logoutAdmin, 
             addProductToDB, 
@@ -332,3 +332,10 @@
         };
 
         window.deleteProduct = async (id) => {
+            if (confirm('আপনি কি নিশ্চিত যে এই প্রোডাক্টটি ডিলিট করতে চান?')) {
+                await deleteProductFromDB(id);
+            }
+        };
+    </script>
+</body>
+                            </html>
