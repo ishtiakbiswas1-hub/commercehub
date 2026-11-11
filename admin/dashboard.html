@@ -1,0 +1,21 @@
+<script type="module">
+  import { checkAuthState, logoutAdmin } from '../assets/js/firebase.js';
+
+  // Route Protection Guard
+  checkAuthState((user) => {
+    if (!user) {
+      // যদি ইউজার লগইন না থাকে, তবে লগইন পেজে রিডাইরেক্ট করবে
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('adminEmailDisplay').textContent = user.email;
+    }
+  });
+
+  // Logout Trigger
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    if (confirm('আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?')) {
+      await logoutAdmin();
+      window.location.href = 'login.html';
+    }
+  });
+</script>
