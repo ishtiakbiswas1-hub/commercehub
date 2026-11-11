@@ -1,0 +1,357 @@
+<<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-900 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Affiliate E-Commerce Platform</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    /* Glassmorphism utilities */
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .light .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+  </style>
+</head>
+<body class="h-full overflow-hidden antialiased font-sans transition-colors duration-200">
+
+  <!-- Main Container -->
+  <div class="flex h-full w-full relative overflow-hidden">
+    
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm hidden lg:hidden transition-opacity"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 flex flex-col transition-transform duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
+      <!-- Sidebar Header -->
+      <div class="h-16 flex items-center justify-between px-6 border-b border-slate-800/80">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+            <i class="fa-solid fa-shop text-lg"></i>
+          </div>
+          <div>
+            <span class="font-bold text-lg tracking-tight text-white block leading-none">AffiliX</span>
+            <span class="text-[10px] text-indigo-400 font-semibold tracking-wider uppercase">Admin Portal</span>
+          </div>
+        </div>
+        <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active flex items-center w-full px-4 py-3 rounded-xl text-sm font-medium transition-all group bg-indigo-600/10 text-indigo-400 border border-indigo-500/20">
+          <i class="fa-solid fa-chart-pie w-6 text-center text-indigo-400 group-hover:scale-110 transition-transform"></i>
+          <span class="ml-3">Dashboard</span>
+        </button>
+
+        <button onclick="switchTab('products')" id="nav-products" class="nav-btn flex items-center w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all group">
+          <i class="fa-solid fa-box-archive w-6 text-center text-slate-400 group-hover:text-indigo-400 group-hover:scale-110 transition-transform"></i>
+          <span class="ml-3">Products</span>
+          <span id="sidebar-product-count" class="ml-auto bg-slate-800 text-indigo-400 text-xs px-2.5 py-0.5 rounded-full font-semibold border border-indigo-500/20">0</span>
+        </button>
+
+        <button onclick="switchTab('advertisements')" id="nav-advertisements" class="nav-btn flex items-center w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all group">
+          <i class="fa-solid fa-rectangle-ad w-6 text-center text-slate-400 group-hover:text-amber-400 group-hover:scale-110 transition-transform"></i>
+          <span class="ml-3">Adsterra Ads</span>
+          <span class="ml-auto bg-amber-500/10 text-amber-400 text-[11px] px-2 py-0.5 rounded font-semibold border border-amber-500/20">4 Slots</span>
+        </button>
+
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex items-center w-full px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all group">
+          <i class="fa-solid fa-sliders w-6 text-center text-slate-400 group-hover:text-emerald-400 group-hover:scale-110 transition-transform"></i>
+          <span class="ml-3">Website Settings</span>
+        </button>
+      </nav>
+
+      <!-- System Status Footer Widget -->
+      <div class="p-4 border-t border-slate-800/80">
+        <div class="bg-slate-800/50 rounded-xl p-3 border border-slate-700/40">
+          <div class="flex items-center justify-between text-xs mb-2">
+            <span class="text-slate-400 font-medium">Firebase Connectivity</span>
+            <span class="flex h-2 w-2 relative">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+          </div>
+          <div class="text-[11px] text-slate-500">Firestore Realtime Listener Ready</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-950">
+      
+      <!-- TOP HEADER -->
+      <header class="h-16 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md flex items-center justify-between px-4 lg:px-8 z-30">
+        <div class="flex items-center space-x-4">
+          <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+          <h1 id="page-title" class="text-lg font-bold text-white tracking-wide">Dashboard</h1>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          
+          <!-- Sync Status Badge -->
+          <div class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+            <i class="fa-solid fa-wifi text-[10px]"></i>
+            <span>Live Sync Active</span>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button onclick="toggleTheme()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors" title="Toggle Light/Dark Theme">
+            <i id="theme-icon" class="fa-solid fa-moon"></i>
+          </button>
+
+          <!-- Notification Bell -->
+          <button onclick="showToast('No new unread notifications', 'info')" class="relative p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors">
+            <i class="fa-regular fa-bell"></i>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full ring-2 ring-slate-900"></span>
+          </button>
+
+          <div class="h-6 w-px bg-slate-800"></div>
+
+          <!-- Admin Profile Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center space-x-3 p-1 rounded-xl hover:bg-slate-800/70 transition-colors focus:outline-none">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Admin Avatar" class="w-8 h-8 rounded-lg object-cover ring-2 ring-indigo-500/40">
+              <div class="text-left hidden md:block">
+                <div class="text-xs font-semibold text-white leading-tight">Admin User</div>
+                <div class="text-[10px] text-slate-400">admin@affilix.com</div>
+              </div>
+              <i class="fa-solid fa-chevron-down text-slate-400 text-xs hidden sm:block"></i>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div class="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1 hidden group-hover:block transition-all z-50">
+              <div class="px-4 py-2 border-b border-slate-800 md:hidden">
+                <div class="text-xs font-semibold text-white">Admin User</div>
+                <div class="text-[10px] text-slate-400">admin@affilix.com</div>
+              </div>
+              <a href="#" onclick="switchTab('settings')" class="flex items-center px-4 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-white">
+                <i class="fa-solid fa-user-gear w-5"></i> Account Settings
+              </a>
+              <button onclick="handleLogout()" class="w-full flex items-center px-4 py-2 text-xs text-rose-400 hover:bg-rose-500/10 transition-colors">
+                <i class="fa-solid fa-right-from-bracket w-5"></i> Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEW PANELS CONTAINER -->
+      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- ================= VIEW 1: DASHBOARD ================= -->
+        <section id="view-dashboard" class="view-panel space-y-6">
+          
+          <!-- STATS CARDS GRID -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            
+            <!-- Card 1 -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-indigo-500/40 transition-all">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Products</p>
+                  <h3 id="stat-total-products" class="text-2xl font-extrabold text-white mt-1">0</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-box"></i>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center text-xs text-slate-400">
+                <span class="text-emerald-400 font-semibold flex items-center"><i class="fa-solid fa-arrow-up text-[10px] mr-1"></i> Sync Active</span>
+                <span class="ml-2">in Catalog</span>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-emerald-500/40 transition-all">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Active Products</p>
+                  <h3 id="stat-active-products" class="text-2xl font-extrabold text-emerald-400 mt-1">0</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center text-xs text-slate-400">
+                <span class="text-slate-400 font-medium">Visible on Customer Site</span>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-rose-500/40 transition-all">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Inactive Products</p>
+                  <h3 id="stat-inactive-products" class="text-2xl font-extrabold text-rose-400 mt-1">0</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-eye-slash"></i>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center text-xs text-slate-400">
+                <span class="text-slate-400 font-medium">Hidden from Public</span>
+              </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-amber-500/40 transition-all">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Ad Slots</p>
+                  <h3 class="text-2xl font-extrabold text-amber-400 mt-1">4</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-rectangle-ad"></i>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center text-xs text-slate-400">
+                <span class="text-slate-400 font-medium">Fixed Positions</span>
+              </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-sky-500/40 transition-all">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Active Ad Slots</p>
+                  <h3 id="stat-active-ads" class="text-2xl font-extrabold text-sky-400 mt-1">0 / 4</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-bullhorn"></i>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center text-xs text-slate-400">
+                <span class="text-sky-400 font-medium">Serving Impressions</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- QUICK ACTIONS & SYSTEM STATUS ROW -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Quick Action Panel -->
+            <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+              <h2 class="text-base font-semibold text-white mb-4 flex items-center">
+                <i class="fa-solid fa-bolt text-amber-400 mr-2"></i> Quick Administrative Actions
+              </h2>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <button onclick="openProductModal()" class="flex flex-col items-center justify-center p-5 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-indigo-500/50 hover:bg-slate-800 transition-all text-center group">
+                  <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-plus"></i>
+                  </div>
+                  <span class="text-sm font-semibold text-white">Add New Product</span>
+                  <span class="text-xs text-slate-400 mt-1">Create affiliate listing</span>
+                </button>
+
+                <button onclick="switchTab('advertisements')" class="flex flex-col items-center justify-center p-5 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-amber-500/50 hover:bg-slate-800 transition-all text-center group">
+                  <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-code"></i>
+                  </div>
+                  <span class="text-sm font-semibold text-white">Manage Ad Slots</span>
+                  <span class="text-xs text-slate-400 mt-1">Configure Adsterra codes</span>
+                </button>
+
+                <button onclick="switchTab('settings')" class="flex flex-col items-center justify-center p-5 rounded-xl bg-slate-800/80 border border-slate-700/60 hover:border-emerald-500/50 hover:bg-slate-800 transition-all text-center group">
+                  <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-gear"></i>
+                  </div>
+                  <span class="text-sm font-semibold text-white">Edit Site Settings</span>
+                  <span class="text-xs text-slate-400 mt-1">Branding & Meta Info</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Status Widget -->
+            <div class="glass-card rounded-2xl p-6">
+              <h2 class="text-base font-semibold text-white mb-4 flex items-center">
+                <i class="fa-solid fa-server text-indigo-400 mr-2"></i> System Health Status
+              </h2>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 border border-slate-700/40">
+                  <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-fire text-amber-500 text-lg"></i>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Firebase Auth</div>
+                      <div class="text-[11px] text-slate-400">Admin Session Active</div>
+                    </div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">CONNECTED</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 border border-slate-700/40">
+                  <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-database text-sky-400 text-lg"></i>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Cloud Firestore</div>
+                      <div class="text-[11px] text-slate-400">Realtime Listener Ready</div>
+                    </div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">ONLINE</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 border border-slate-700/40">
+                  <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-cloud-arrow-up text-violet-400 text-lg"></i>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Firebase Storage</div>
+                      <div class="text-[11px] text-slate-400">Asset Engine Ready</div>
+                    </div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">READY</span>
+               
