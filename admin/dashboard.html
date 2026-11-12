@@ -36,6 +36,7 @@
         <div class="flex items-center gap-2">
             <a href="products.html" class="p-2 text-slate-300 hover:text-white bg-slate-700/50 rounded-lg text-xs"><i class="fa-solid fa-box"></i></a>
             <a href="advertisements.html" class="p-2 text-slate-300 hover:text-white bg-slate-700/50 rounded-lg text-xs"><i class="fa-solid fa-rectangle-ad"></i></a>
+            <a href="settings.html" class="p-2 text-slate-300 hover:text-white bg-slate-700/50 rounded-lg text-xs"><i class="fa-solid fa-sliders"></i></a>
         </div>
     </div>
 
@@ -95,7 +96,7 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 p-4 md:p-8 pb-20 md:pb-8">
+        <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8">
             <header class="flex items-center justify-between mb-8 pb-4 border-b border-slate-800">
                 <div>
                     <h1 class="text-xl md:text-2xl font-bold text-white">ড্যাশবোর্ড ওভারভিউ</h1>
@@ -139,7 +140,7 @@
     </div>
 
     <!-- Mobile Bottom Navigation Bar -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 px-4 py-2 flex items-center justify-around z-40 text-xs">
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 px-4 py-2.5 flex items-center justify-around z-40 text-xs">
         <a href="dashboard.html" class="flex flex-col items-center text-indigo-400 font-semibold py-1">
             <i class="fa-solid fa-chart-pie text-base mb-0.5"></i>
             <span>ড্যাশবোর্ড</span>
@@ -151,4 +152,65 @@
         <a href="advertisements.html" class="flex flex-col items-center text-slate-400 py-1">
             <i class="fa-solid fa-rectangle-ad text-base mb-0.5"></i>
             <span>বিজ্ঞাপন</span>
-    </a>
+        </a>
+        <a href="settings.html" class="flex flex-col items-center text-slate-400 py-1">
+            <i class="fa-solid fa-sliders text-base mb-0.5"></i>
+            <span>সেটিংস</span>
+        </a>
+    </div>
+
+    <!-- Firebase Authentication & Stats Module -->
+    <script type="module">
+        import { checkAuthState, logoutAdmin, db } from '../assets/js/firebase.js';
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const adminEmailDisplay = document.getElementById('adminEmailDisplay');
+        const totalProductsCount = document.getElementById('totalProductsCount');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Check user session with fallback timer to prevent infinite loading
+        const safetyTimer = setTimeout(() => {
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+        }, 4000);
+
+        checkAuthState(async (user) => {
+            clearTimeout(safetyTimer);
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                if (adminEmailDisplay) adminEmailDisplay.textContent = user.email;
+                await fetchDashboardStats();
+                if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            }
+        });
+
+        // Fetch Total Products from Firestore
+        async function fetchDashboardStats() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "products"));
+                if (totalProductsCount) {
+                    totalProductsCount.textContent = querySnapshot.size + ' টি';
+                }
+            } catch (err) {
+                console.error("Error fetching stats:", err);
+                if (totalProductsCount) totalProductsCount.textContent = '০ টি';
+            }
+        }
+
+        // Logout Event Listener
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                if (confirm('আপনি কি নিশ্চিত যে লগআউট করতে চান?')) {
+                    try {
+                        await logoutAdmin();
+                        window.location.href = 'login.html';
+                    } catch (err) {
+                        alert('লগআউট করতে সমস্যা হচ্ছে: ' + err.message);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+    </html>
